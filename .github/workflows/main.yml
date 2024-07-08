@@ -3,18 +3,35 @@ name: Deploy WebGL to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main  # Change this to your default branch if it's not main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install http-server
+        run: npm install -g http-server
+
+      - name: Serve WebGL Build Locally (for testing only)
+        run: http-server ./Build/WebGL --port 8080 -c-1 -o &
+        
+      - name: Wait for 10 seconds to allow server to start
+        run: sleep 10
+
+      - name: Test WebGL Build
+        run: curl -I http://localhost:8080
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Build
+          publish_dir: ./Build/WebGL
