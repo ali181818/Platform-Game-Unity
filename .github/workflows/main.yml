@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy WebGL to GitHub Pages
 
 on:
   push:
@@ -6,14 +6,15 @@ on:
       - main
 
 jobs:
-  deployPages:
-    name: Deploy to Github Pages 🚀
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          branch: gh-pages
-          folder: Build
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./Build
