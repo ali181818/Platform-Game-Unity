@@ -6,24 +6,44 @@ on:
       - main  # Change this to your default branch if it's not main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Install Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
-      - name: Install http-server
-        run: npm install -g http-server
+      - name: Install http-server and compression dependencies
+        run: |
+          npm install -g http-server
+          npm install express express-static-gzip
 
       - name: Serve WebGL Build Locally (for testing only)
-        run: http-server ./Build/WebGL --port 8080 -c-1 -o &
-        
+        run: |
+          echo "const express = require('express');
+                const expressStaticGzip = require('express-static-gzip');
+                const app = express();
+                app.use('/', expressStaticGzip(__dirname + '/Build', {
+                  enableBrotli: true,
+                  orderPreference: ['br', 'gzip'],
+                  setHeaders: (res, path) => {
+                    if (path.endsWith('.br')) {
+                      res.setHeader('Content-Encoding', 'br');
+                    } else if (path.endsWith('.gz')) {
+                      res.setHeader('Content-Encoding', 'gzip');
+                    }
+                  }
+                }));
+                app.listen(8080, () => {
+                  console.log('Server running on port 8080');
+                });" > server.js
+          node server.js &
+
       - name: Wait for 10 seconds to allow server to start
         run: sleep 10
 
@@ -34,4 +54,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Build/WebGL
+          publish_dir: ./Build
+          publish_branch: gh-pages
