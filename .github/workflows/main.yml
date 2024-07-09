@@ -13,23 +13,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-
       - name: Install dependencies
-        run: npm install express express-static-gzip node-forge
+        run: npm install express express-static-gzip
 
-      - name: Run local server with Brotli support (for testing)
+      - name: Run local server for testing
         run: |
-          node server.js &
-
-      - name: Wait for 10 seconds to allow server to start
-        run: sleep 10
-
-      - name: Test WebGL Build
-        run: curl -k -I https://localhost:8080
+          npx http-server ./Build -p 8080 &
+          sleep 10
+          curl -I http://localhost:8080
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

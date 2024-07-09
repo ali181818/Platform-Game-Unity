@@ -3,4 +3,4 @@ This project showcases basic platformer mechanics, offering a simple yet engagin
 
 ![alt text](Preview.png)
 ---
-### <center>Click to Play</center>
+### <center>[Click to Play](https://ali181818.github.io/Platform-Game-Unity)</center>
