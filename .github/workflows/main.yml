@@ -6,49 +6,27 @@ on:
       - main  # Change this to your default branch if it's not main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install Node.js
-        uses: actions/setup-node@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          node-version: '14'
+          python-version: '3.x'
 
-      - name: Install http-server and compression dependencies
+      - name: Run local server with Brotli support (for testing)
         run: |
-          npm install -g http-server
-          npm install express express-static-gzip
-
-      - name: Serve WebGL Build Locally (for testing only)
-        run: |
-          echo "const express = require('express');
-                const expressStaticGzip = require('express-static-gzip');
-                const app = express();
-                app.use('/', expressStaticGzip(__dirname + '/Build', {
-                  enableBrotli: true,
-                  orderPreference: ['br', 'gzip'],
-                  setHeaders: (res, path) => {
-                    if (path.endsWith('.br')) {
-                      res.setHeader('Content-Encoding', 'br');
-                    } else if (path.endsWith('.gz')) {
-                      res.setHeader('Content-Encoding', 'gzip');
-                    }
-                  }
-                }));
-                app.listen(80, () => {
-                  console.log('Server running on port 80');
-                });" > server.js
-          node server.js &
+          python3 server.py &
 
       - name: Wait for 10 seconds to allow server to start
         run: sleep 10
 
       - name: Test WebGL Build
-        run: curl -I http://localhost:80
+        run: curl -I http://localhost:8080
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
