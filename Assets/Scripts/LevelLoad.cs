@@ -28,14 +28,10 @@ public class LevelLoad : MonoBehaviour {
             door.sprite = doorClosed;
         }
     }
-
-    void Update() {
-        
-    }
     void OnTriggerStay2D( Collider2D other ) {
         if( other.CompareTag("Player") ) {
             // if( Input.GetButtonDown("Jump") )
-            if( Input.GetKey(KeyCode.F) && unlocked )
+            if( ( Input.GetKey(KeyCode.F) || Input.GetButton("Jump") ) && unlocked )
                 SceneManager.LoadScene( levelToLoad );
         }
     }

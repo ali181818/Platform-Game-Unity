@@ -181,7 +181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8922022279520964356, guid: abf0c4dd40aa46346b0eb323262824ed, type: 3}
       propertyPath: levelToUnlock
-      value: Level 2
+      value: Level 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

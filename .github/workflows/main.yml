@@ -3,7 +3,7 @@ name: Deploy WebGL to GitHub Pages
 on:
   push:
     branches:
-      - main  # Change this to your default branch if it's not main
+      - main
 
 jobs:
   deploy:
@@ -12,15 +12,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Install dependencies
-        run: npm install express express-static-gzip
-
-      - name: Run local server for testing
-        run: |
-          npx http-server ./Build -p 8080 &
-          sleep 10
-          curl -I http://localhost:8080
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
