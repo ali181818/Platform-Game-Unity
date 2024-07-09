@@ -7,7 +7,7 @@ const forge = require('node-forge');
     generateX509Certificate([
       { type: 6, value: 'http://localhost' },
       { type: 7, ip: '127.0.0.1' }
-    ]), 
+    ]),
     makeExpressApp()
   );
   server.listen(8080, () => {

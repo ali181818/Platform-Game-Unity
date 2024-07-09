@@ -29,7 +29,7 @@ jobs:
         run: sleep 10
 
       - name: Test WebGL Build
-        run: curl -I https://localhost:8080
+        run: curl -k -I https://localhost:8080
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
